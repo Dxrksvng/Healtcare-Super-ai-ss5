@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>n8n Chat Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <h1>n8n Chat Interface</h1>
+        
+        <!-- Mode Switcher -->
+        <div class="mode-switcher">
+            <button id="textModeBtn" class="active">โหมดพิมพ์</button>
+            <button id="voiceModeBtn">โหมดเสียง</button>
+        </div>
+
+        <!-- Chat Window -->
+        <div class="chat-window">
+            <div id="messages"></div>
+        </div>
+
+        <!-- Text Input Area -->
+        <div class="input-area">
+            <textarea id="textInput" placeholder="พิมพ์ข้อความที่นี่..." rows="3"></textarea>
+            <button id="sendTextBtn">ส่งข้อความ</button>
+        </div>
+
+        <!-- Voice Controls -->
+        <div class="voice-controls" style="display: none;">
+            <button id="startButton">เริ่มพูด</button>
+            <button id="stopButton" disabled>หยุดพูด</button>
+            <button id="mockSpeech">จำลองเสียง</button>
+            <button id="testTTS">ทดสอบ TTS</button>
+        </div>
+
+        <!-- Audio element for playing TTS -->
+        <audio id="ttsAudio" autoplay style="display: none;"></audio>
+
+        <!-- Status Message -->
+        <div class="status-message" id="statusMessage">พร้อมใช้งาน</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

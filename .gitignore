@@ -1,0 +1,28 @@
+# General
+.DS_Store
+*.swp
+*~
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environments
+env/
+venv/
+.env
+.venv
+env.bak/
+venv.bak/
+
+# Local data and audio
+/data/audio/
+/audio/
+/static/audio/
+*.mp3
+*.wav
+
+# Project specific
+*.log
+uv.lock
+.python-version
