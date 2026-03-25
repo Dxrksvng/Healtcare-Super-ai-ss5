@@ -1,23 +1,30 @@
-# 🤖 Tao Tun Chatbot — Smart Thai Voice & Text Assistant
+# 🤖 Tao Tun Chatbot — Super AI SS5 Project
 
-> A modern, modular Thai chatbot platform powered by speech recognition, text-to-speech, and webhook-driven intelligence.
+> A smart Thai voice & text chatbot developed as part of **Super AI Engineer Season 5**
+
+---
+
+## 🏆 Project Background
+
+**Tao Tun Chatbot** is a project developed under the **Super AI Engineer Season 5 (SS5)** program — a national-level AI talent development initiative focused on building real-world AI solutions.
+
+This project is inspired by the concept of:
+
+> 🧓 *AI-powered Elderly Care & Palliative Preparation System*
+
+The goal is to create an intelligent assistant that helps support communication, accessibility, and digital interaction—especially for Thai users, including the elderly.
 
 ---
 
 ## 🚀 Overview
 
-**Tao Tun Chatbot** is a versatile conversational AI system designed for seamless interaction in **Thai language**, supporting both **text-based** and **voice-based** communication.
+**Tao Tun Chatbot** is a modular conversational AI system that enables users to interact via:
 
-This project combines multiple technologies into a unified architecture:
+* 💬 Text
+* 🎙️ Voice (Speech-to-Text)
+* 🔊 Audio responses (Text-to-Speech)
 
-* 🎙️ Speech-to-Text (STT)
-* 🔊 Text-to-Speech (TTS)
-* 🌐 Webhook-based AI logic (e.g., n8n workflows)
-* 🖥️ Multiple frontend interfaces
-
-The goal is simple:
-
-> Deliver a natural, flexible, and extensible chatbot experience tailored for real-world Thai users.
+It integrates multiple components into a seamless pipeline using webhook-based logic (e.g., n8n), making it flexible and extensible for various applications.
 
 ---
 
@@ -25,48 +32,39 @@ The goal is simple:
 
 ### 🗣️ Multi-Modal Interaction
 
-* Input via **text** or **voice**
-* Real-time transcription for spoken input
+* Supports both **text input** and **voice input**
+* Real-time transcription of speech
 
-### 🇹🇭 Thai Language Native Support
+### 🇹🇭 Thai-Native AI Experience
 
-* Optimized for Thai speech recognition
-* Natural Thai voice generation via TTS
+* Optimized for **Thai language**
+* Natural Thai voice responses
 
-### 🔗 Webhook-Driven Intelligence
+### 🔗 Webhook-Based Intelligence
 
-* Easily plug into backend logic (e.g., n8n, APIs, LLMs)
-* Decoupled architecture for maximum flexibility
+* Connect to backend workflows (e.g., n8n, APIs, LLMs)
+* Easily customizable logic without changing frontend
 
-### 🖥️ Multiple Frontends
+### 🖥️ Multiple User Interfaces
 
-* Streamlit-based interactive UI
-* Lightweight Web UI (HTML/CSS/JS)
-
-### 🔊 Audio Pipeline
-
-* Generate and serve audio responses dynamically
-* Temporary audio storage for playback
+* Streamlit app for rapid prototyping
+* Lightweight web interface (HTML/JS/CSS)
 
 ---
 
-## 🏗️ Project Architecture
+## 🏗️ Project Structure
 
-```
+```bash
 Tao_tun/
 │
 ├── src/
 │   ├── app/        # 🎤 Streamlit voice chatbot interface
-│   ├── server/     # 🔊 Flask TTS server (gTTS powered)
-│   └── web/        # 🌐 Static web frontend (HTML/JS/CSS)
+│   ├── server/     # 🔊 Flask TTS server (gTTS)
+│   └── web/        # 🌐 Web UI (HTML/JS/CSS)
 │
-├── data/
-│   └── audio/      # 📁 Temporary generated audio files
-│
-├── scripts/        # ⚙️ Utility & setup scripts
-│
-├── pyproject.toml  # 📦 Dependency management
-└── README.md       # 📘 You are here
+├── data/audio/     # 📁 Temporary audio storage
+├── scripts/        # ⚙️ Utility scripts
+└── pyproject.toml  # 📦 Dependencies
 ```
 
 ---
@@ -76,17 +74,17 @@ Tao_tun/
 * **Frontend**
 
   * Streamlit
-  * Vanilla HTML / CSS / JavaScript
+  * HTML / CSS / JavaScript
 
 * **Backend**
 
-  * Flask (TTS Server)
-  * Webhook Integration (e.g., n8n)
+  * Flask (TTS server)
+  * Webhook (n8n / API)
 
-* **AI / Audio**
+* **AI Components**
 
   * Speech Recognition (STT)
-  * gTTS (Google Text-to-Speech)
+  * gTTS (Text-to-Speech)
 
 ---
 
@@ -94,79 +92,56 @@ Tao_tun/
 
 ### 📌 Prerequisites
 
-* Python **3.10+**
-* pip or **uv** (recommended)
-
----
+* Python 3.10+
+* pip or uv
 
 ### 📥 Installation
 
 ```bash
 git clone https://github.com/Eakkachad/Tao_tun.git
 cd Tao_tun
-```
-
-Install dependencies:
-
-```bash
 pip install -e .
-# OR
+# or
 uv sync
 ```
 
 ---
 
-## ▶️ Running the System
+## ▶️ Run the System
 
-### 🎤 1. Start Streamlit App
+### 🎤 Streamlit App
 
 ```bash
 streamlit run src/app/main.py
 ```
 
----
-
-### 🔊 2. Start TTS Server
+### 🔊 TTS Server
 
 ```bash
 python src/server/main.py
 ```
 
----
+### 🌐 Web Interface
 
-### 🌐 3. Open Web Interface
-
-Open in browser:
+Open:
 
 ```
 src/web/index.html
 ```
 
-> ⚠️ Ensure:
->
-> * TTS server is running
-> * Webhook endpoint is reachable
-
 ---
 
 ## 🔧 Configuration
 
-The chatbot logic is powered by a **Webhook URL**.
-
-Update the `WEBHOOK_URL` in:
-
-* Streamlit app
-* Web frontend scripts
-
-Example:
+Update webhook URL in source code:
 
 ```python
-WEBHOOK_URL = "https://your-n8n-or-api-endpoint/webhook/chat"
+WEBHOOK_URL = "https://your-backend/webhook"
 ```
 
 ---
 
-## 🔄 How It Works
+## 🔄 System Workflow
 
 ```mermaid
 flowchart LR
@@ -181,34 +156,32 @@ flowchart LR
 
 ## 💡 Use Cases
 
-* 🏫 Educational assistants (Thai-speaking)
-* 🏢 Customer support bots
-* 📞 Voice-enabled service kiosks
-* 🤖 AI-powered automation via n8n
+* 👵 Elderly assistance chatbot
+* 🏥 Healthcare communication support
+* 🏢 Customer service automation
+* 📚 Educational AI assistant
 
 ---
 
-## 🧪 Future Improvements
+## 🔮 Future Development
 
-* 🎯 Better Thai NLP accuracy
-* 🧠 LLM integration (OpenAI / local models)
-* 📱 Mobile-friendly UI
-* 🔐 Authentication & user sessions
-* 📊 Analytics dashboard
+* LLM integration (OpenAI / Local models)
+* Improved Thai NLP accuracy
+* Mobile-friendly UI
+* User authentication & analytics
 
 ---
 
 ## 📜 License
 
-This project is intended for **development and demonstration purposes**.
+For educational and development purposes.
 
 ---
 
-## ✨ Credits
+## 🙌 Acknowledgement
 
-Developed with passion for Thai AI innovation 🇹🇭
-Built to bridge human conversation and intelligent systems.
+This project is part of the **Super AI Engineer Season 5 (SS5)** program, aiming to develop practical AI solutions for real-world impact in Thailand 🇹🇭
 
 ---
 
-> “Talk naturally. Let Tao Tun handle the rest.” 🎙️
+> “Empowering conversations with AI — for everyone.” 🤖✨
