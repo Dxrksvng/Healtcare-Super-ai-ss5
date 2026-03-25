@@ -1,65 +1,214 @@
-# Tao Tun Chatbot
+# 🤖 Tao Tun Chatbot — Smart Thai Voice & Text Assistant
 
-Tao Tun is a versatile Thai chatbot designed to support both text and voice-to-text interactions. The project integrates multiple components to provide a seamless conversational experience using speech recognition, text-to-speech (TTS), and webhook-based logic.
+> A modern, modular Thai chatbot platform powered by speech recognition, text-to-speech, and webhook-driven intelligence.
 
-## Project Structure
+---
 
-The project is organized into several key directories for clarity and modularity:
+## 🚀 Overview
 
-- `src/app/`: Contains the Streamlit-based application for the voice-enabled chatbot interface.
-- `src/server/`: A Flask-based server providing text-to-speech capabilities via gTTS.
-- `src/web/`: A vanilla HTML/JS/CSS web interface for interacting with the chatbot.
-- `data/audio/`: Temporary storage for generated audio files.
-- `scripts/`: Utility scripts for project setup or maintenance.
+**Tao Tun Chatbot** is a versatile conversational AI system designed for seamless interaction in **Thai language**, supporting both **text-based** and **voice-based** communication.
 
-## Key Features
+This project combines multiple technologies into a unified architecture:
 
-- **Text and Voice Input**: Users can type messages or use the microphone for input.
-- **Thai Language Support**: Built-in support for Thai speech recognition and generation.
-- **Webhook Integration**: Flexible backend connectivity through a central webhook (e.g., n8n).
-- **Multiple Frontends**: Choose between a Streamlit app and a lightweight web interface.
+* 🎙️ Speech-to-Text (STT)
+* 🔊 Text-to-Speech (TTS)
+* 🌐 Webhook-based AI logic (e.g., n8n workflows)
+* 🖥️ Multiple frontend interfaces
 
-## Getting Started
+The goal is simple:
 
-### Prerequisites
+> Deliver a natural, flexible, and extensible chatbot experience tailored for real-world Thai users.
 
-- Python 3.10+
-- Requirements listed in `pyproject.toml` (managed by `uv` or `pip`).
+---
 
-### Installation
+## 🧠 Key Capabilities
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Eakkachad/Tao_tun.git
-   cd Tao_tun
-   ```
+### 🗣️ Multi-Modal Interaction
 
-2. Install dependencies:
-   ```bash
-   pip install -e .
-   # or
-   uv sync
-   ```
+* Input via **text** or **voice**
+* Real-time transcription for spoken input
 
-### Running the Application
+### 🇹🇭 Thai Language Native Support
 
-- **Streamlit App**:
-  ```bash
-  streamlit run src/app/main.py
-  ```
+* Optimized for Thai speech recognition
+* Natural Thai voice generation via TTS
 
-- **TTS Server**:
-  ```bash
-  python src/server/main.py
-  ```
+### 🔗 Webhook-Driven Intelligence
 
-- **Web Interface**:
-  Open `src/web/index.html` in a web browser. Ensure the TTS server and webhook are reachable.
+* Easily plug into backend logic (e.g., n8n, APIs, LLMs)
+* Decoupled architecture for maximum flexibility
 
-## Configuration
+### 🖥️ Multiple Frontends
 
-The chatbot logic is powered by a webhook. Update the `WEBHOOK_URL` in the respective source files to point to your backend logic (e.g., n8n workflow).
+* Streamlit-based interactive UI
+* Lightweight Web UI (HTML/CSS/JS)
 
-## License
+### 🔊 Audio Pipeline
 
-This project is for demonstration and development purposes.
+* Generate and serve audio responses dynamically
+* Temporary audio storage for playback
+
+---
+
+## 🏗️ Project Architecture
+
+```
+Tao_tun/
+│
+├── src/
+│   ├── app/        # 🎤 Streamlit voice chatbot interface
+│   ├── server/     # 🔊 Flask TTS server (gTTS powered)
+│   └── web/        # 🌐 Static web frontend (HTML/JS/CSS)
+│
+├── data/
+│   └── audio/      # 📁 Temporary generated audio files
+│
+├── scripts/        # ⚙️ Utility & setup scripts
+│
+├── pyproject.toml  # 📦 Dependency management
+└── README.md       # 📘 You are here
+```
+
+---
+
+## ⚙️ Tech Stack
+
+* **Frontend**
+
+  * Streamlit
+  * Vanilla HTML / CSS / JavaScript
+
+* **Backend**
+
+  * Flask (TTS Server)
+  * Webhook Integration (e.g., n8n)
+
+* **AI / Audio**
+
+  * Speech Recognition (STT)
+  * gTTS (Google Text-to-Speech)
+
+---
+
+## 🛠️ Getting Started
+
+### 📌 Prerequisites
+
+* Python **3.10+**
+* pip or **uv** (recommended)
+
+---
+
+### 📥 Installation
+
+```bash
+git clone https://github.com/Eakkachad/Tao_tun.git
+cd Tao_tun
+```
+
+Install dependencies:
+
+```bash
+pip install -e .
+# OR
+uv sync
+```
+
+---
+
+## ▶️ Running the System
+
+### 🎤 1. Start Streamlit App
+
+```bash
+streamlit run src/app/main.py
+```
+
+---
+
+### 🔊 2. Start TTS Server
+
+```bash
+python src/server/main.py
+```
+
+---
+
+### 🌐 3. Open Web Interface
+
+Open in browser:
+
+```
+src/web/index.html
+```
+
+> ⚠️ Ensure:
+>
+> * TTS server is running
+> * Webhook endpoint is reachable
+
+---
+
+## 🔧 Configuration
+
+The chatbot logic is powered by a **Webhook URL**.
+
+Update the `WEBHOOK_URL` in:
+
+* Streamlit app
+* Web frontend scripts
+
+Example:
+
+```python
+WEBHOOK_URL = "https://your-n8n-or-api-endpoint/webhook/chat"
+```
+
+---
+
+## 🔄 How It Works
+
+```mermaid
+flowchart LR
+    User -->|Text / Voice| Frontend
+    Frontend -->|Request| Webhook
+    Webhook -->|Response| Frontend
+    Frontend -->|Text| TTS Server
+    TTS Server -->|Audio| User
+```
+
+---
+
+## 💡 Use Cases
+
+* 🏫 Educational assistants (Thai-speaking)
+* 🏢 Customer support bots
+* 📞 Voice-enabled service kiosks
+* 🤖 AI-powered automation via n8n
+
+---
+
+## 🧪 Future Improvements
+
+* 🎯 Better Thai NLP accuracy
+* 🧠 LLM integration (OpenAI / local models)
+* 📱 Mobile-friendly UI
+* 🔐 Authentication & user sessions
+* 📊 Analytics dashboard
+
+---
+
+## 📜 License
+
+This project is intended for **development and demonstration purposes**.
+
+---
+
+## ✨ Credits
+
+Developed with passion for Thai AI innovation 🇹🇭
+Built to bridge human conversation and intelligent systems.
+
+---
+
+> “Talk naturally. Let Tao Tun handle the rest.” 🎙️
