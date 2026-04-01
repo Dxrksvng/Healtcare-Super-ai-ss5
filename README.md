@@ -1,7 +1,7 @@
 # 🤖 Tao Tun Chatbot — Super AI SS5 Project
 
 > A smart Thai voice & text chatbot developed as part of **Super AI Engineer Season 5**
-
+Poster Project: https://canva.link/p2c75jg8eqr08jr 
 ---
 
 ## 🏆 Project Background
