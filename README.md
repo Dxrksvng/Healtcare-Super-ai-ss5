@@ -28,16 +28,18 @@
 1. [Overview](#overview)
 2. [What is in this repository](#what-is-in-this-repository)
 3. [Tech stack](#tech-stack)
-4. [Architecture](#architecture)
-5. [Flow diagrams](#flow-diagrams)
-6. [Components in detail](#components-in-detail)
-7. [Webhook contract](#webhook-contract)
-8. [Getting started](#getting-started)
-9. [Configuration](#configuration)
-10. [Privacy and safety notes](#privacy-and-safety-notes)
-11. [Known limitations](#known-limitations)
-12. [Suggested next steps](#suggested-next-steps)
-13. [Credits](#credits)
+4. [Problem and impact](#problem-and-impact)
+5. [Real system: the n8n workflow](#real-system-the-n8n-workflow)
+6. [Architecture](#architecture)
+7. [Flow diagrams](#flow-diagrams)
+8. [Components in detail](#components-in-detail)
+9. [Webhook contract](#webhook-contract)
+10. [Getting started](#getting-started)
+11. [Configuration](#configuration)
+12. [Privacy and safety notes](#privacy-and-safety-notes)
+13. [Known limitations](#known-limitations)
+14. [Suggested next steps](#suggested-next-steps)
+15. [Credits](#credits)
 
 ---
 
@@ -53,9 +55,9 @@ A user can:
 
 The client does not contain the conversation logic. It forwards each message to a **webhook** (an [n8n](https://n8n.io) workflow) and shows or speaks whatever the workflow returns. Changing the assistant's behaviour means changing the workflow, not this code.
 
-> **Scope of this repository.** This repo is the client layer: two user interfaces and a Thai text-to-speech server. The n8n workflow behind the webhook (the language model, symptom intake, memory, logging and any messaging channel) is **not included here**, so none of those behaviours are implemented or claimed by this code. The assistant is not a diagnostic tool and nothing in this repo gives medical advice.
+> **Scope of this repository.** This repo is the client layer: two user interfaces and a Thai text-to-speech server. The n8n workflow behind the webhook is **not exported into this repo**. Its design is documented below from the project poster ([Real system: the n8n workflow](#real-system-the-n8n-workflow)); statements about Gemini, Zep Memory, LINE, Google Sheets and the dashboard come from that poster, not from code in this repository. The assistant does not diagnose diseases or recommend medicine, and nothing in this repo gives medical advice.
 
-**ภาษาไทย (สรุป):** เฒ่าทันเป็นส่วนติดต่อผู้ใช้ของแชทบอทสำหรับผู้สูงอายุและการเตรียมตัวรับมือโรคร้ายแรง ผู้ใช้พิมพ์หรือพูดภาษาไทยได้ ระบบส่งข้อความไปยัง webhook ของ n8n แล้วแสดงหรืออ่านคำตอบออกเสียง repo นี้มีเฉพาะฝั่งอินเทอร์เฟซและเซิร์ฟเวอร์แปลงข้อความเป็นเสียง ส่วนตรรกะการสนทนาอยู่ใน n8n ซึ่งไม่ได้อยู่ใน repo นี้
+**ภาษาไทย (สรุป):** เฒ่าทันเป็นส่วนติดต่อผู้ใช้ของแชทบอทสำหรับผู้สูงอายุและการเตรียมตัวรับมือโรคร้ายแรง ผู้ใช้พิมพ์หรือพูดภาษาไทยได้ ระบบส่งข้อความไปยัง webhook ของ n8n แล้วแสดงหรืออ่านคำตอบออกเสียง repo นี้มีเฉพาะฝั่งอินเทอร์เฟซและเซิร์ฟเวอร์แปลงข้อความเป็นเสียง ส่วนตรรกะการสนทนาอยู่ใน n8n (อธิบายจากโปสเตอร์ในหัวข้อ Real system) ซึ่งไม่ได้ export มาไว้ใน repo นี้
 
 ---
 
@@ -97,10 +99,61 @@ taotun/
 | Audio playback | pydub + ffmpeg | Local playback of the MP3 in the Streamlit app |
 | Speech to text (desktop) | SpeechRecognition + PyAudio, `recognize_google` (`th-TH`) | Microphone capture and transcription |
 | Speech to text (web) | Browser Web Speech API (`webkitSpeechRecognition`, `th-TH`) | In-browser transcription, Chrome |
-| Orchestration | <img src="https://img.shields.io/badge/-n8n_webhook-EA4B71?logo=n8n&logoColor=white" alt=""> | Conversation logic (external to this repo) |
+| Orchestration | <img src="https://img.shields.io/badge/-n8n-EA4B71?logo=n8n&logoColor=white" alt=""> | Seven-step workflow behind the webhook (per poster; not exported here) |
+| LLM | <img src="https://img.shields.io/badge/-Google_Gemini-8E75B2?logo=googlegemini&logoColor=white" alt=""> | Chatbot agent: answers, converses, analyses context (per poster) |
+| Memory | Zep Memory | Conversation memory store (per poster) |
+| Messaging | <img src="https://img.shields.io/badge/-LINE-00C300?logo=line&logoColor=white" alt=""> | User channel for replies (per poster) |
+| Logging | <img src="https://img.shields.io/badge/-Google_Sheets-34A853?logo=googlesheets&logoColor=white" alt=""> | Stores conversations for later analysis (per poster) |
 | HTTP client | requests (Python), `fetch` (browser) | Webhook and TTS calls |
 | Front end | <img src="https://img.shields.io/badge/-HTML5-E34F26?logo=html5&logoColor=white" alt=""> <img src="https://img.shields.io/badge/-CSS3-1572B6?logo=css3&logoColor=white" alt=""> <img src="https://img.shields.io/badge/-JavaScript-F7DF1E?logo=javascript&logoColor=black" alt=""> | Web interface, Kanit font from Google Fonts |
 | Packaging | <img src="https://img.shields.io/badge/-uv-DE5FE9?logo=uv&logoColor=white" alt=""> / pip | `pyproject.toml` (`flask`, `flask-cors`, `gtts`, `pyaudio`, `pydub`, `requests`, `speechrecognition`, `streamlit`) |
+
+---
+
+## Problem and impact
+
+Source: the project poster (figures cited there from a Ministry of Public Health document, 2019).
+
+- **Pain point:** medical staff are in short supply while the number of older adults keeps rising, so there is little time to take a health history and follow symptoms case by case. Baseline health data goes missing and care becomes uneven.
+- **Scale (as reported on the poster):** by 2037 (BE 2580) Thailand is projected to be short of about **7,161 professional nurses**, even though more than 10,000 people graduate each year, because the number leaving the system keeps growing.
+- **Impact if unaddressed:** older adults receive care late, health data is lost, risk of complications rises, and staff burnout increases.
+- **Solution:** Tao Tun is a friendly AI chatbot that takes a health history and screens older adults' health through spoken or typed conversation (STT and TTS), communicates with emotional awareness, and adapts its manner to each person, **without diagnosing disease or recommending medicine**.
+- **Expected outcomes:** less repeated work and fewer data-entry errors for staff, more time saved, and a more sustainable standard of elder care in the community.
+- **Strengths:** understands emotion and adjusts behaviour for older adults; works as a companion that listens and analyses; reduces staff load and improves care quality.
+
+The poster's tagline: *"We will give nurses their time back, and give patients peace of mind."*
+
+---
+
+## Real system: the n8n workflow
+
+The poster describes a seven-step n8n workflow plus three user-facing parts: **UI** (a real-use web interface with TTS and STT), **Dashboard** (reports and preliminary analysis) and **Data** (collection of older adults' behaviour and history).
+
+| # | n8n step | What it does |
+|---|---|---|
+| 1 | Receive data (Webhook) | Receives input from sources such as LINE, online forms or other apps |
+| 2 | Select key fields (Manual Filter) | Keeps only what is needed, for example `userId` and `text` |
+| 3 | Set the question guide (Code block) | Builds an initial set of questions that guides the AI agent's conversation |
+| 4 | Call the AI chatbot (first bot) | **Gemini** answers, talks with the user and analyses content by context; results go to a memory system (**Zep Memory**) |
+| 5 | Extra processing (Code block) | Transforms data and prepares it for saving or further analysis |
+| 6 | Format the result (Manual Output) | Checks and arranges data into a suitable output shape |
+| 7 | Send out | Replies to the user via **LINE** or another online channel, and **logs to Google Sheets** for later analysis |
+
+```mermaid
+flowchart LR
+    SRC(["LINE, online form,\nweb app (this repo)"]) --> S1["1. Webhook\nreceive"]
+    S1 --> S2["2. Manual Filter\nuserId, text"]
+    S2 --> S3["3. Code\nquestion guide"]
+    S3 --> S4{{"4. AI Agent\nGemini chatbot"}}
+    MEM[("Zep Memory")] <--> S4
+    S4 --> S5["5. Code\ntransform and prepare"]
+    S5 --> S6["6. Manual Output\nformat result"]
+    S6 --> OUT1["7a. Reply to user\nLINE or other channel"]
+    S6 --> OUT2[("7b. Google Sheets\nlog for analysis")]
+    OUT2 --> DASH["Dashboard\nreports and preliminary analysis"]
+```
+
+Where this repo fits: the Streamlit app and the web page are two additional **sources** for step 1, and they supply the speech layer (STT in, TTS out) that LINE text chat does not have.
 
 ---
 
@@ -108,31 +161,38 @@ taotun/
 
 ```mermaid
 flowchart LR
-    subgraph User["User"]
+    subgraph User["Users"]
         U(["Elderly user or caregiver"])
     end
 
     subgraph Clients["Client layer (this repo)"]
         ST["Streamlit app\nsrc/app/main.py"]
         WEB["Web interface\nsrc/web/*"]
+        LINE["LINE chat\n(per poster)"]
     end
 
     subgraph Backend["Backend"]
-        N8N["n8n workflow\nwebhook (not in this repo)"]
+        N8N["n8n workflow\nGemini agent + Zep Memory\n(not exported in this repo)"]
         TTS["Flask TTS server\nsrc/server/main.py :5000"]
+        GS[("Google Sheets\nlog")]
+        DASH["Dashboard\n(per poster)"]
     end
 
-    subgraph Google["Google services (via libraries)"]
-        GSTT["Web Speech / Speech API\nSTT th-TH"]
+    subgraph Google["Google speech services (via libraries)"]
+        GSTT["Speech recognition\nth-TH"]
         GTTS["Google Translate TTS\nvia gTTS"]
     end
 
-    U <-->|"type, speak, listen"| ST
-    U <-->|"type, speak, listen"| WEB
+    U <--> ST
+    U <--> WEB
+    U <--> LINE
     ST -->|"POST {text}"| N8N
     WEB -->|"POST {message, timestamp}"| N8N
+    LINE -->|"webhook"| N8N
     N8N -->|"reply text"| ST
     N8N -->|"reply text"| WEB
+    N8N -->|"reply"| LINE
+    N8N --> GS --> DASH
     ST -. "audio" .-> GSTT
     WEB -. "audio" .-> GSTT
     ST -->|"gTTS direct, plays locally"| GTTS
@@ -140,7 +200,7 @@ flowchart LR
     TTS --> GTTS
 ```
 
-The two clients are independent. The Streamlit app synthesises speech by itself; the web page delegates synthesis to the Flask server because a browser cannot call gTTS.
+The two clients in this repo are independent. The Streamlit app synthesises speech by itself; the web page delegates synthesis to the Flask server because a browser cannot call gTTS.
 
 ---
 
@@ -354,6 +414,7 @@ Values are constants in the source, not environment variables.
 This project is aimed at health conversations with older adults, so treat data handling seriously before any real use.
 
 - **Speech and text leave the device.** Desktop speech recognition uses `recognize_google`, the browser uses Chrome's speech service, and gTTS sends reply text to a Google service. Do not route real patient information through this setup without a lawful basis and appropriate consent under Thailand's PDPA.
+- **More processors per the poster.** The workflow sends conversation content to Gemini, a memory service (Zep) and Google Sheets, and replies through LINE. Each is a separate data processor with its own terms; map them in a PDPA data-flow review before real use.
 - **No authentication, no encryption of the local audio files.** MP3 files are short-lived (deleted 60 seconds after being served) but exist unencrypted on disk first. If a file is never fetched it is not deleted by this code.
 - **The TTS server runs with `debug=True` on `0.0.0.0`** and open CORS. That is acceptable for a local demo only. Do not expose it to a network: Flask's debugger can allow code execution.
 - **Not medical advice.** The client performs no clinical logic. Any medical behaviour belongs to the workflow behind the webhook and must be reviewed by clinicians.
@@ -362,7 +423,7 @@ This project is aimed at health conversations with older adults, so treat data h
 
 ## Known limitations
 
-- The n8n workflow, language model and any messaging integration are outside this repo, so the assistant's actual capabilities cannot be verified from this code.
+- The n8n workflow (Gemini, Zep Memory, LINE, Google Sheets) and the dashboard are described from the poster but are not in this repo, so those capabilities cannot be verified from this code.
 - Streamlit and web clients use different request fields (`text` vs `message`).
 - `src/app/main.py` references `uuid` in a guarded expression without importing it; the guard makes it harmless, but the variable is unused.
 - `src/web/index.html` is titled "n8n Chat Interface" and the "simulate speech" button is a placeholder.
@@ -386,6 +447,6 @@ This project is aimed at health conversations with older adults, so treat data h
 
 ## Credits
 
-Built for **Super AI Engineer Season 5** (AIAT, the Artificial Intelligence Association of Thailand). The project received an **Honorable Mention**. Project concept: *AI-powered elderly care and palliative preparation system*.
+Built by the **ThaoThan Team** with **ASCEND CO., LTD.** and **Yuenyen Social Enterprise** for **Super AI Engineer Season 5** (AIAT, the Artificial Intelligence Association of Thailand). The project received an **Honorable Mention**. Project concept: *AI-powered elderly care and palliative preparation system*.
 
 For educational and development purposes.
